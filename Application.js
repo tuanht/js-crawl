@@ -4,8 +4,10 @@
  * @author tuanht
  */
 
-// Store all controller
-var fbcloud = {};
+// Store all controller, global variable...
+var appcloud = {
+    controller: {}
+};
 
 Application = $class(Object, {
     /**
