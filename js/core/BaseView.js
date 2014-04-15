@@ -21,5 +21,14 @@ BaseView = $class(Object, {
      */
     init: function() {
         // I have nothing todo here :)
+    },
+
+    /**
+     * All child view must define this method when create to determine where is
+     * view's node in HTML DOM tree
+     * @return An ID of node in DOM tree
+     */
+    getMainNodeId: function(id) {
+        
     }
 });

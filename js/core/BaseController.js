@@ -26,5 +26,12 @@ BaseController = $class(Object, {
             this.view = this.getView.apply(this, arguments);
             this.view.ctrl = this;
         }
+    },
+
+    /**
+     * Method used when refresh controller
+     */
+    refresh: function() {
+
     }
 });
