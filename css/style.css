@@ -1,0 +1,19 @@
+body {
+    margin: 0;
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    font-size: 12px;
+    background-color: #EEE;
+}
+
+header {
+    background-color: #3b5998;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 15px;
+    font-size: 16px;
+    color: #FFF;
+}
+
+.hidden {
+    visibility: hidden;
+}
