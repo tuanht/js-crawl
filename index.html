@@ -2,22 +2,33 @@
 <html>
 <head>
     <link type="text/css" rel="stylesheet" href="css/style.css" />
+    
+    <script>
+    // First start point for application
+    function onLoad() { new Application(); }
+    </script>
+</head>
+<body onLoad="onLoad();">
+    <div id="homePage" class="undisplayed">
+        Page URL
+        <input type="text" size="50" />
+        <button type="button" class="btn">Crawl</button>
+    </div>
 
+    <!-- Javascript file -->
     <script src="lib/jquery-1.10.2.min.js"></script>
 
     <script src="js/core/OOP.js"></script>
     <script src="js/core/BaseController.js"></script>
     <script src="js/core/BaseView.js"></script>
     <script src="js/utils.js"></script>
+    <script src="js/PagesManager.js"></script>
+
+    <script src="js/controller/HomePageController.js"></script>
+
+    <script src="js/view/HomePageView.js"></script>
 
     <script src="Application.js"></script>
-    <script>
-    function onLoad() {
-        // First start point for application
-        new Application();
-    }
-    </script>
-</head>
-<body onLoad="onLoad();">
+    <script src="Pages.js"></script>
 </body>
 </html>

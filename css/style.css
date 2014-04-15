@@ -17,3 +17,7 @@ header {
 .hidden {
     visibility: hidden;
 }
+
+.undisplayed {
+    display: none;
+}
