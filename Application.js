@@ -14,6 +14,6 @@ Application = $class(Object, {
      * First start point for application
      */
     init: function() {
-        // Set fbcloud variable is here
+        // Set appcloud variable is here
     }
 });

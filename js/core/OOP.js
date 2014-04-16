@@ -1,13 +1,14 @@
 /**
  * Core for OOP's inherits implementation
- * @author tuanht
  */
 
 /*
  * Define parent function for class
  */
 Object.prototype.parent = function() {
+    // Get the caller that call this function
     var fn = arguments.callee.caller;
+    // If the caller has _super method, then call it
     if (!fn._super) return;
     return fn._super.apply(this, arguments);
 }
