@@ -18,6 +18,7 @@ feature more easily and readable. `init` is constructor function.
 
 Example:
 
+```javascript
 $foo = $class(Object, {
     bar: "foobar",
 
@@ -29,6 +30,7 @@ $foo = $class(Object, {
 
     }
 });
+```
 
 ### Base controller & Base view
 
