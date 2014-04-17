@@ -3,7 +3,11 @@
  */
 HomePageView = $class(BaseView, {
     init: function() {
-        
+        this.parent();
+    },
+
+    refresh: function() {
+        this.parent();
     },
 
     /**
@@ -11,5 +15,15 @@ HomePageView = $class(BaseView, {
      */
     getMainNodeId: function(id) {
         return "homePage";
+    },
+
+    /**
+     * Get String input in `crawlUrl` text box
+     *
+     * @return URL string
+     */
+    getCrawlUrl: function() {
+        var crawlUrlInput = $id("crawlUrl");
+        return crawlUrlInput.value;
     }
 });

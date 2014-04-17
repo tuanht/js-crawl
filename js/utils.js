@@ -1,22 +1,9 @@
-Array.prototype.forEachEnd = function(fun /*, thisArg */) {
-    "use strict";
+/**
+ * Wrapper function for document.getElementById() function
 
-    if (this === void 0 || this === null) throw new TypeError();
-
-    var t = Object(this);
-    var len = t.length >>> 0;
-    if (typeof fun !== "function") throw new TypeError();
-
-    var thisArg = arguments.length >= 2 ? arguments[1] : void 0;
-    for (var i = len - 1; i >= 0; i--) {
-        if (i in t) fun.call(thisArg, t[i], i, t);
-    }
-};
-
-function cloneJSON(j) {
-    return JSON.parse(JSON.stringify(j));
-}
-
+ * @param id ID of element need get
+ * @return DOM document of element
+ */
 function $id(id) {
     return document.getElementById(id);
 }
@@ -35,4 +22,42 @@ function $setSafeHTMLText(node, text) {
     if(text != null) {
         node.innerHTML = text;
     }
+}
+
+/**
+ * Get image native width & height
+ *
+ * @param imgSrc URL of image
+ * @return JSON object contain 2 properties: width & height of image
+ * @link http://css-tricks.com/snippets/jquery/get-an-images-native-width/
+ */
+function getImageNativeSize(imgSrc) {
+    // Create new offscreen image to test
+    var theImage = new Image();
+    theImage.src = imgSrc;
+
+    // Return accurate measurements from that
+    return {
+        width: theImage.naturalWidth,
+        height: theImage.naturalWidth
+    };
+}
+
+/**
+ * Get location object from a URL string
+ *
+ * @param url String of web URL
+ * @return Location object
+ */
+function getLocationFromUrlString(url) {
+    var a = document.createElement('a');
+    a.href = url;
+
+    return {
+        hostname: a.hostname,
+        href: a.href,
+        pathname: a.pathname,
+        port: a.port,
+        protocol: a.protocol
+    };
 }
