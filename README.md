@@ -3,20 +3,6 @@ js-crawl
 
 JS app which can crawl a page and produce the following report: The number of images on the page, the height and width of the images and post that information as a PUT to a website form automatically.
 
-This application should:
-* Post data Asynchronously as PUT or a GET to a webservice
-* Have unit tests
-* Be minimised and low latency
-* Have proper design structure and coding standards
-* Source code should be in hosted GIt repository either BitBucket or GitHub
-* Use JavaScript and Ajax for this test.
-
-Bonus Points:
-* Talk and PUT to a Restful API
-* Utilised other JS libraries
-* Package as a Bookmarklet 
-* Package as a Chrome extensions
-
 ### MVC Framework
 
 JS-Crawl run on a mini JS framework with these features:
