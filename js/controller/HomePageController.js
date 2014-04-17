@@ -52,7 +52,7 @@ HomePageController = $class(BaseController, {
         // http://deepakpathak.in/2012/06/web-crawler-in-javascript/
         // https://www.google.com.vn/
         var self = this;
-        $.ajax({
+        $.crawl({
             url: url,
             type: "GET",
             success: function(data) {
