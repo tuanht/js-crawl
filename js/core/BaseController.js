@@ -16,6 +16,11 @@ BaseController = $class(Object, {
     model: null,
 
     /**
+     * NOTE: Every method must be (or not, mark with @optional flag in comment)
+     * implement in any class that inherits from this class
+     */
+
+    /**
      * Contrustor method. All child class must call this method <this.parent()>
      * To init all the necessary things
      */
@@ -29,9 +34,21 @@ BaseController = $class(Object, {
     },
 
     /**
+     * Every controller will use this method (optional) to attach a view
+     * to its by return a new instance of View class
+     *
+     * @optional
+     */
+    getView: function() {
+        
+    },
+
+    /**
      * Method used when refresh controller
      */
     refresh: function() {
-
+        if (this.view) {
+            this.view.refresh.apply(this, arguments);
+        }
     }
 });

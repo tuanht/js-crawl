@@ -16,6 +16,11 @@ BaseView = $class(Object, {
     model: null,
 
     /**
+     * NOTE: Every method must be (or not, mark with @optional flag in comment)
+     * implement in any class that inherits from this class
+     */
+
+    /**
      * Contrustor method. All child class must call this method <this.parent()>
      * To init all the necessary things
      */
@@ -24,8 +29,16 @@ BaseView = $class(Object, {
     },
 
     /**
+     * Method used when refresh controller
+     */
+    refresh: function() {
+
+    },
+
+    /**
      * All child view must define this method when create to determine where is
      * view's node in HTML DOM tree
+     *
      * @return An ID of node in DOM tree
      */
     getMainNodeId: function(id) {
