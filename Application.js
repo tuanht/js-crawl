@@ -14,6 +14,6 @@ Application = $class(Object, {
      * First start point for application
      */
     init: function() {
-        // Set appcloud variable is here
+        PagesManager.setPage(Pages.homePage)
     }
 });
