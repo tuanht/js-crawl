@@ -45,3 +45,11 @@ Pages.js contain all page config will use in application, include controller and
 
 `PagesManager.setPage` function will set page in param and display it to user. If re-set the page,
 function `refresh` will be call automatically.
+
+### Unit testing
+
+This application use jQuery's qunit as unit test. Open index.html file in test/ directory to run
+unit test.
+
+`getImageNativeSize` test case may fail several times because the image is not cached at the first
+times run, or until you open these images in your browser that run unit test.
