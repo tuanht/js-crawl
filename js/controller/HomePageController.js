@@ -23,7 +23,9 @@ HomePageController = $class(BaseController, {
      */
     registerOnClickListener: function() {
         var execCrawlButton = $id("execCrawl");
-        execCrawlButton.addEventListener("click", this.onClick(this));
+        if (execCrawlButton) {
+            execCrawlButton.addEventListener("click", this.onClick(this));
+        }
     },
 
     /**
@@ -35,7 +37,12 @@ HomePageController = $class(BaseController, {
     onClick: function(self) {
         return function() {
             self.model = [];
-            self.crawUrl(self.view.getCrawlUrl());
+            try {
+                self.crawlUrl(self.view.getCrawlUrl());
+            } catch (error) {
+                alert(error);
+                self.view.setCrawlStatusLabel("Error");
+            }
         };
     },
 
@@ -46,17 +53,24 @@ HomePageController = $class(BaseController, {
      *
      * @param url Page url need to crawl
      */
-    crawUrl: function(url) {
+    crawlUrl: function(url) {
         // Test with these pages
         // https://www.simple.com/blog/
         // http://deepakpathak.in/2012/06/web-crawler-in-javascript/
-        // https://www.google.com.vn/
+
+        // With https://www.google.com.vn/ on Chrome, first time run, can not
+        // get any of image
         var self = this;
+
+        this.view.setCrawlStatusLabel("Running");
+
         $.crawl({
             url: url,
             type: "GET",
             success: function(data) {
-                self.crawUrlSuccessCallback(url, data);
+                self.crawlUrlSuccessCallback(url, data);
+
+                self.view.setCrawlStatusLabel("Ok");
             }
         });
     },
@@ -68,13 +82,13 @@ HomePageController = $class(BaseController, {
      * @param url The crawled page url
      * @param data Array of img tag found by crawl function
      */
-    crawUrlSuccessCallback: function(url, data) {
+    crawlUrlSuccessCallback: function(url, data) {
         var self = this;
         var head = data.forEach(function(item, index) {
             // Create HTML element by HTML code (String)
             var img = $.parseHTML(item)[0];
 
-            if (typeof img.src != "") {
+            if (img.src != "") {
 
                 // Image source may be local URL like
                 // this /images/icons/product/chrome-48.png
@@ -85,13 +99,15 @@ HomePageController = $class(BaseController, {
                     var realImgUrl = urlLocation.protocol + "//"
                         + urlLocation.hostname + imgLocation.pathname;
                     img.src = realImgUrl;
+                } else if (imgLocation.protocol == "file:") {
+                    urlLocation = getLocationFromUrlString(url);
+                    img.src = urlLocation.protocol + imgLocation.href.substring(
+                        imgLocation.protocol.length, imgLocation.href.length);
                 }
 
                 self.pushImageReport(img);
             }
         });
-
-        alert('success');
     },
 
     /**
