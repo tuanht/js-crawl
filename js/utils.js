@@ -8,24 +8,21 @@ function $id(id) {
     return document.getElementById(id);
 }
 
-function $createElement(tagName) {
-    return document.createElement(tagName);
-}
-
+/**
+ * Set text content of HTML element
+ *
+ * @param node HTML element of node need set text content
+ * @param text String of content
+ */
 function $setText(node, text) {
     if(text != null) {
         node.textContent = text;
     }
 }
 
-function $setSafeHTMLText(node, text) {
-    if(text != null) {
-        node.innerHTML = text;
-    }
-}
-
 /**
  * Get image native width & height
+ * TODO sometime (at the first time), it cannot get size properly
  *
  * @param imgSrc URL of image
  * @return JSON object contain 2 properties: width & height of image
@@ -39,7 +36,7 @@ function getImageNativeSize(imgSrc) {
     // Return accurate measurements from that
     return {
         width: theImage.naturalWidth,
-        height: theImage.naturalWidth
+        height: theImage.naturalHeight
     };
 }
 
