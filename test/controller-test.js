@@ -22,7 +22,7 @@ test('crawlUrl("https://www.simple.com/blog/")', function() {
         url: url,
         type: "GET",
         success: function(data) {
-            ctrl.crawlUrlSuccessCallback(url, data);
+            ctrl.crawlUrlSuccessCallback(url, data, true);
 
             equal(ctrl.model.length, 1, "1 img tag");
 
@@ -46,13 +46,14 @@ test('crawlUrl("http://deepakpathak.in/2012/06/web-crawler-in-javascript/")', fu
         url: url,
         type: "GET",
         success: function(data) {
-            ctrl.crawlUrlSuccessCallback(url, data);
+            ctrl.crawlUrlSuccessCallback(url, data, true);
 
-            equal(ctrl.model.length, 4, "4 img tag");
+            equal(ctrl.model.length, 5, "5 img tag");
             notEqual(ctrl.model[0].source.indexOf("gravatar.com"), -1, "Image 1 is from Gravatar");
             notEqual(ctrl.model[1].source.indexOf("gravatar.com"), -1, "Image 2 is from Gravatar");
             notEqual(ctrl.model[2].source.indexOf("gravatar.com"), -1, "Image 3 is from Gravatar");
             notEqual(ctrl.model[3].source.indexOf("gravatar.com"), -1, "Image 4 is from Gravatar");
+            notEqual(ctrl.model[4].source.indexOf("gravatar.com"), -1, "Image 5 is from Gravatar");
 
             // Resume excution
             start();

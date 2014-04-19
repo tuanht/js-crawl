@@ -74,7 +74,7 @@ HomePageController = $class(BaseController, {
             url: url,
             type: "GET",
             success: function(data) {
-                self.crawlUrlSuccessCallback(url, data);
+                self.crawlUrlSuccessCallback(url, data, false);
             }
         });
     },
@@ -86,7 +86,7 @@ HomePageController = $class(BaseController, {
      * @param url The crawled page url
      * @param data Array of img tag found by crawl function
      */
-    crawlUrlSuccessCallback: function(url, data) {
+    crawlUrlSuccessCallback: function(url, data, isUnitTest) {
         var self = this;
         var head = data.forEach(function(item, index) {
             // Create HTML element by HTML code (String)
@@ -112,6 +112,11 @@ HomePageController = $class(BaseController, {
                 self.pushImageReport(img);
             }
         });
+
+        if (isUnitTest == true) {
+            // Abort the below code in case run unit test
+            return;
+        }
 
         if (this.model.length == 0) {
             self.view.setCrawlStatusLabel("Ok");
