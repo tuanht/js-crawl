@@ -34,3 +34,9 @@ body, input, button {
     background-color: green;
     color: white;
 }
+
+#crawlResult {
+    padding: 10px;
+    border: 1px solid;
+    margin-top: 10px;
+}
