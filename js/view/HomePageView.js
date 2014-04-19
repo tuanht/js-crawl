@@ -60,5 +60,19 @@ HomePageView = $class(BaseView, {
             $setText(label, status);
             label.className = status.toLowerCase();
         }
+    },
+
+    /**
+     * Display result text of JSON object to HTML element
+     *
+     * @param resultObject Crawl result
+     */
+    displayCrawlResult: function(resultObject) {
+        var node = $id("crawlResult");
+        if (resultObject == null) {
+            $setText(node, "");
+        } else {
+            $setText(node, JSON.stringify(resultObject));
+        }
     }
 });

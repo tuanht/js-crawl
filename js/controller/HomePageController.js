@@ -2,6 +2,11 @@
  * Controller class that control entire home page, inherits from BaseController
  */
 HomePageController = $class(BaseController, {
+    /**
+     * Node.js RESTful API to insert report data to dababase
+     */
+    POST_REPORT_API_URL: "http://localhost:3000/report/",
+
     init: function() {
         this.parent();
         this.registerOnClickListener();
@@ -37,6 +42,7 @@ HomePageController = $class(BaseController, {
     onClick: function(self) {
         return function() {
             self.model = [];
+            self.view.displayCrawlResult(null);
             try {
                 self.crawlUrl(self.view.getCrawlUrl());
             } catch (error) {
@@ -69,8 +75,6 @@ HomePageController = $class(BaseController, {
             type: "GET",
             success: function(data) {
                 self.crawlUrlSuccessCallback(url, data);
-
-                self.view.setCrawlStatusLabel("Ok");
             }
         });
     },
@@ -107,6 +111,25 @@ HomePageController = $class(BaseController, {
 
                 self.pushImageReport(img);
             }
+        });
+
+        if (this.model.length == 0) {
+            self.view.setCrawlStatusLabel("Ok");
+            return;
+        }
+
+        // Dipslay crawl result
+        console.log("Result: " + JSON.stringify(this.model));
+        this.view.displayCrawlResult(this.model);
+
+        // POST report to ajax
+        $.post(this.POST_REPORT_API_URL, {
+            url: url,
+            imageCount: this.model.length,
+            imageList: this.model
+        }, function(data) {
+            console.log("Insert to DB, _id: " + data._id);
+            self.view.setCrawlStatusLabel("Ok");
         });
     },
 
