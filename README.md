@@ -53,3 +53,10 @@ unit test.
 
 `getImageNativeSize` test case may fail several times because the image is not cached at the first
 times run, or until you open these images in your browser that run unit test.
+
+### POST crawl result to web service
+
+The crawl result data will be POST to web service automatically. The server API URL is define in
+`HomePageController.POST_REPORT_API_URL`.
+
+Furthermore, I has written a piece of web service at [js-crawl-server](https://github.com/tuanht/js-crawl-server).
