@@ -13,7 +13,20 @@ HomePageView = $class(BaseView, {
             if (typeof crawlUrlInput.value == "undefined"
                     || crawlUrlInput.value == "") {
                 crawlUrlInput.value = decodeURIComponent(urlVal);
+
+                // Delay Call crawl
+                var self = this;
+                setTimeout(function() {
+                    self.ctrl.model = [];
+                    self.ctrl.crawlUrl(crawlUrlInput.value);
+                }, 800);
             }
+        }
+
+        // If in Chrome extension mode, hidden the link for install bookmarklet
+        if (window.location.protocol == "chrome-extension:"
+                || window.location.protocol == "file:") {
+            $id("setupBookmarklet").setAttribute("style", "display: none;");
         }
     },
 

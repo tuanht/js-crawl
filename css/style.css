@@ -40,3 +40,25 @@ body, input, button {
     border: 1px solid;
     margin-top: 10px;
 }
+
+#setupBookmarklet {
+    clear: both;
+    margin: .75em 0;
+    overflow: auto;
+    padding: 0;
+    width: auto;
+}
+
+#setupBookmarklet a {
+    cursor: move;
+    display: block;
+    float: left;
+    height: 54px;
+    margin: 1em 1.3em 0.6em 1em;
+    width: 163px;
+    border: 1px solid gray;
+    text-align: center;
+    background-color: #0ca43a;
+    border-radius: 5px;
+    padding-top: 20px;
+}

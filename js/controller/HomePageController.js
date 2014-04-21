@@ -136,17 +136,10 @@ HomePageController = $class(BaseController, {
         // Image source may be local URL like
         // this /images/icons/product/chrome-48.png
         // Append hostname to this link
-        var result = "";
+        var result = itemSrc;
 
         var imgLocation = getLocationFromUrlString(itemSrc);
-
-        if (imgLocation.hostname != ""
-                && imgLocation.pathname != ""
-                && imgLocation.protocol != ""
-                && imgLocation.protocol != "chrome-extension:") {
-            // Image source is full path
-            return itemSrc;
-        }
+        var urlLocation = getLocationFromUrlString(pageUrl);
 
         if (imgLocation.hostname == ""
                 || window.location.protocol == "http:"
@@ -156,11 +149,11 @@ HomePageController = $class(BaseController, {
 
             // Condition: window.location.protocol == "http:" : happend when
             // current windows location protocol is http (host may be any)
-
-            var urlLocation = getLocationFromUrlString(pageUrl);
             var realImgUrl = "";
 
-            if (itemSrc[0] == '/') {
+            if (itemSrc.indexOf("http") != -1) {
+                realImgUrl = itemSrc; // run in web server with full image path
+            } else if (itemSrc[0] == '/') {
                 // Image locate at root
                 realImgUrl = urlLocation.protocol + "//"
                 + urlLocation.hostname + imgLocation.pathname;
