@@ -12,7 +12,7 @@ HomePageView = $class(BaseView, {
             var crawlUrlInput = $id("crawlUrl");
             if (typeof crawlUrlInput.value == "undefined"
                     || crawlUrlInput.value == "") {
-                crawlUrlInput.value = urlVal;
+                crawlUrlInput.value = decodeURIComponent(urlVal);
             }
         }
     },
