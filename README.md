@@ -24,7 +24,7 @@ Use command line to change directory, then type this command to run
 
 After run web services, from your browser, type the follow URL and go:
 
-`[localhost:8080/index.html](http://localhost:8080/index.html)`
+[localhost:8080/index.html](http://localhost:8080/index.html)
 
 To install Bookmarklet, click and drag green bookmarklet on the left to your bookmarks or favorites bar.
 From now, In any page, user can click on Bookmarklet in bar to transfer to application and begin crawl there web page.
@@ -92,8 +92,6 @@ times run, or until you open these images in your browser that run unit test.
 
 The crawl result data will be POST to web service automatically. The server API URL is define in
 `HomePageController.POST_REPORT_API_URL`.
-
-Furthermore, I has written a piece of web service at [js-crawl-server](https://github.com/tuanht/js-crawl-server).
 
 ### Web service avaiable API
 
