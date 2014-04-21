@@ -63,6 +63,8 @@ HomePageController = $class(BaseController, {
         // Test with these pages
         // https://www.simple.com/blog/
         // http://deepakpathak.in/2012/06/web-crawler-in-javascript/
+        // http://docs.spring.io/spring-amqp/docs/1.3.1.RELEASE/reference/html/amqp.html
+        // https://developer.chrome.com/extensions/apps
 
         // With https://www.google.com.vn/ on Chrome, first time run, can not
         // get any of image
@@ -90,26 +92,10 @@ HomePageController = $class(BaseController, {
         var self = this;
         var head = data.forEach(function(item, index) {
             // Create HTML element by HTML code (String)
-            var img = $.parseHTML(item)[0];
+            var imgSrc = $(item).attr("src");
 
-            if (img.src != "") {
-
-                // Image source may be local URL like
-                // this /images/icons/product/chrome-48.png
-                // Append hostname to this link
-                var imgLocation = getLocationFromUrlString(img.src);
-                if (imgLocation.hostname == "") {
-                    var urlLocation = getLocationFromUrlString(url);
-                    var realImgUrl = urlLocation.protocol + "//"
-                        + urlLocation.hostname + imgLocation.pathname;
-                    img.src = realImgUrl;
-                } else if (imgLocation.protocol == "file:") {
-                    urlLocation = getLocationFromUrlString(url);
-                    img.src = urlLocation.protocol + imgLocation.href.substring(
-                        imgLocation.protocol.length, imgLocation.href.length);
-                }
-
-                self.pushImageReport(img);
+            if (typeof imgSrc != "undefined" && imgSrc != "") {
+                self.pushImageReport(self.getRealImageSource(url, imgSrc));
             }
         });
 
@@ -139,26 +125,115 @@ HomePageController = $class(BaseController, {
     },
 
     /**
+     * Get real Image source from a string 
+     * like `/static/img/img.jpg` or `image/file.jpg` of page URL
+     *
+     * @param pageUrl Crawl page URL
+     * @param itemSrc Image source from HTML string
+     * @return Full path of image source, maybe ""
+     */
+    getRealImageSource: function(pageUrl, itemSrc) {
+        // Image source may be local URL like
+        // this /images/icons/product/chrome-48.png
+        // Append hostname to this link
+        var result = "";
+
+        var imgLocation = getLocationFromUrlString(itemSrc);
+
+        if (imgLocation.hostname != ""
+                && imgLocation.pathname != ""
+                && imgLocation.protocol != ""
+                && imgLocation.protocol != "chrome-extension:") {
+            // Image source is full path
+            return itemSrc;
+        }
+
+        if (imgLocation.hostname == ""
+                || window.location.protocol == "http:"
+                || window.location.protocol == "chrome-extension:") {
+            // Condition: imgLocation.hostname == "" : happend when run without
+            // web server and itemSrc is src without hostname
+
+            // Condition: window.location.protocol == "http:" : happend when
+            // current windows location protocol is http (host may be any)
+
+            var urlLocation = getLocationFromUrlString(pageUrl);
+            var realImgUrl = "";
+
+            if (itemSrc[0] == '/') {
+                // Image locate at root
+                realImgUrl = urlLocation.protocol + "//"
+                + urlLocation.hostname + imgLocation.pathname;
+            } else {
+                // Image is relative path
+
+                // Remove `file.html` string at the end of URL path (if any)
+                var splitUrl = urlLocation.pathname.split("/");
+                var urlLocationPath = urlLocation.pathname;
+                if (splitUrl[splitUrl.length - 1].indexOf(".") != -1) {
+                    urlLocationPath = urlLocation.pathname.replace(
+                        splitUrl[splitUrl.length - 1], "");
+                }
+
+                realImgUrl = urlLocation.protocol + "//"
+                    + urlLocation.hostname + urlLocationPath
+                    + itemSrc;
+            }
+
+            result = realImgUrl;
+        } else if (imgLocation.protocol == "file:") {
+            // This case happen only when run index.html in
+            // browser without web server
+            urlLocation = getLocationFromUrlString(pageUrl);
+            result = urlLocation.protocol + imgLocation.href.substring(
+                imgLocation.protocol.length, imgLocation.href.length);
+        }
+
+        return result;
+    },
+
+    /**
      * Get size of image and push it to model to generate report
      *
-     * @param img IMG HTML element
+     * @param imgSrc Source of image
      */
-    pushImageReport: function(img) {
-        var imgSize = getImageNativeSize(img.src);
+    pushImageReport: function(imgSrc) {
+        if (imgSrc == "" || this.isDuplicateImgSrc(imgSrc)) return;
+
+        var imgSize = getImageNativeSize(imgSrc);
 
         // Some of image on Gravatar can not get image size,
         // so I will get from element attribute instead
-        if (imgSize.width == 0) {
-            imgSize.width = img.width;
-        }
-        if (imgSize.height == 0) {
-            imgSize.height = img.height;
-        }
+        // if (imgSize.width == 0) {
+        //     imgSize.width = img.width;
+        // }
+        // if (imgSize.height == 0) {
+        //     imgSize.height = img.height;
+        // }
 
         this.model.push({
-            source: img.src,
+            source: imgSrc,
             width: imgSize.width,
             height: imgSize.height
         });
+    },
+
+    /**
+     * Check for duplication image source in model
+     *
+     * @param imgSrc Image source
+     * @return true If duplicate, false if not
+     */
+    isDuplicateImgSrc: function(imgSrc) {
+        var result = false;
+        this.model.some(function(element, index, array) {
+            if (imgSrc == element.source) {
+                // break
+                result = true;
+                return true;
+            }
+            return false;
+        });
+        return result;
     }
 });

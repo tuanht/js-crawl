@@ -8,6 +8,25 @@ module("HomePageController");
  * Current, my test not include image from background-image property
  */
 
+test('getRealImageSource()', function() {
+    var ctrl = new HomePageController();
+
+    var pageUrl = "http://docs.spring.io/spring-amqp/docs/1.3.1.RELEASE/reference/html/amqp.html";
+    var imgUrl = "http://docs.spring.io/spring-amqp/docs/1.3.1.RELEASE/reference/html/images/note.png"
+    equal(ctrl.getRealImageSource(pageUrl, "images/note.png"), imgUrl,
+        pageUrl + " contain " + imgUrl);
+
+    pageUrl = "https://developer.chrome.com/extensions/apps";
+    imgUrl = "https://developer.chrome.com/static/images/chrome-logo_2x.png";
+    equal(ctrl.getRealImageSource(pageUrl, "/static/images/chrome-logo_2x.png"),
+        imgUrl, pageUrl + " contain " + imgUrl);
+
+    pageUrl = "https://www.foobar.com/";
+    imgUrl = "https://www.another.com/image.jpg";
+    equal(ctrl.getRealImageSource(pageUrl, imgUrl),
+        imgUrl, pageUrl + " contain " + imgUrl);
+});
+
 test('crawlUrl("https://www.simple.com/blog/")', function() {
     var ctrl = new HomePageController();
 
