@@ -1,0 +1,11 @@
+{
+  "manifest_version": 2,
+  "name": "JS Crawler",
+  "description": "JS app which can crawl a page and produce the following report: The number of images on the page, the height and width of the images and post that information as a PUT to a website form automatically.",
+  "version": "1",
+  "app": {
+    "launch": {
+      "local_path": "index.html"
+    }
+  }
+}
