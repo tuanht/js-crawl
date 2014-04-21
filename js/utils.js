@@ -58,3 +58,35 @@ function getLocationFromUrlString(url) {
         protocol: a.protocol
     };
 }
+
+// Extend function for jQuery to get GET parameters
+$.extend({
+    // w3lessons.info/2013/02/25/how-to-get-url-parameters-values-using-jquery/
+
+    /**
+     * Get all URL parameters
+     *
+     * @return Array of parameter
+     */
+    getUrlVars: function() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(
+            window.location.href.indexOf('?') + 1).split('&');
+        for(var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    },
+
+    /**
+     * Get paramater of URL
+     * 
+     * @param name Name of paramater
+     * @return String value of parameter
+     */
+    getUrlVar: function(name) {
+        return $.getUrlVars()[name];
+    }
+});

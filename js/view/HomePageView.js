@@ -4,6 +4,17 @@
 HomePageView = $class(BaseView, {
     init: function() {
         this.parent();
+
+        // If param `url` in specific in URL of App when load,
+        // then get and set to input box
+        var urlVal = $.getUrlVar("url");
+        if (typeof urlVal != "undefined" && urlVal != "") {
+            var crawlUrlInput = $id("crawlUrl");
+            if (typeof crawlUrlInput.value == "undefined"
+                    || crawlUrlInput.value == "") {
+                crawlUrlInput.value = urlVal;
+            }
+        }
     },
 
     refresh: function() {
