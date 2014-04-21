@@ -17,3 +17,5 @@ Application = $class(Object, {
         PagesManager.setPage(Pages.homePage)
     }
 });
+
+window.addEventListener("load", new Application());

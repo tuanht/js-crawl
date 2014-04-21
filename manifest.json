@@ -7,5 +7,12 @@
     "launch": {
       "local_path": "index.html"
     }
-  }
+  },
+  "icons": {
+    "128": "icon.png"
+  },
+  "permissions": [
+    "https://query.yahooapis.com/*"
+  ],
+  "content_security_policy": "script-src 'self' https://query.yahooapis.com; object-src 'self' https://query.yahooapis.com"
 }

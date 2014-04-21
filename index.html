@@ -1,14 +1,10 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+    <title>JS Crawl application</title>
     <link type="text/css" rel="stylesheet" href="css/style.css" />
-    
-    <script>
-    // First start point for application
-    function onLoad() { new Application(); }
-    </script>
 </head>
-<body onLoad="onLoad();">
+<body>
     <div id="homePage" class="undisplayed">
         Page URL
         <input id="crawlUrl" type="text" size="50" />
@@ -32,7 +28,7 @@
 
     <script type="text/javascript" src="js/view/HomePageView.js"></script>
 
-    <script type="text/javascript" src="Application.js"></script>
     <script type="text/javascript" src="Pages.js"></script>
+    <script type="text/javascript" src="Application.js"></script><!-- This file must be place at the end -->
 </body>
 </html>
