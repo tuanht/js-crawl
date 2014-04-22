@@ -16,9 +16,8 @@ Use command line to change directory, then type this command to download and ins
 
 ### Run web services
 
-Use command line to change directory, then type this command to run
-
-`nodejs server.js`
+* Open server.js in, replace `/home/tuanht/git/js-crawl` in line 25 & 26 with your local directory of repositoty
+* Use command line to change directory, then type this command to run: `nodejs server.js`
 
 ### Test the App
 
