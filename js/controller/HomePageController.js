@@ -7,6 +7,11 @@ HomePageController = $class(BaseController, {
      */
     POST_REPORT_API_URL: "http://localhost:3000/report/",
 
+    /**
+     * Current crawling URL
+     */
+    crawlUrlString: null,
+
     init: function() {
         this.parent();
         this.registerOnClickListener();
@@ -69,6 +74,7 @@ HomePageController = $class(BaseController, {
         // With https://www.google.com.vn/ on Chrome, first time run, can not
         // get any of image
         var self = this;
+        this.crawlUrlString = url;
 
         this.view.setCrawlStatusLabel("Running");
 
@@ -76,7 +82,7 @@ HomePageController = $class(BaseController, {
             url: url,
             type: "GET",
             success: function(data) {
-                self.crawlUrlSuccessCallback(url, data, false);
+                self.crawlUrlSuccessCallback(data, false);
             }
         });
     },
@@ -88,26 +94,52 @@ HomePageController = $class(BaseController, {
      * @param url The crawled page url
      * @param data Array of img tag found by crawl function
      */
-    crawlUrlSuccessCallback: function(url, data, isUnitTest) {
+    crawlUrlSuccessCallback: function(data, isUnitTest) {
         var self = this;
+
         var head = data.forEach(function(item, index) {
             // Create HTML element by HTML code (String)
             var imgSrc = $(item).attr("src");
 
             if (typeof imgSrc != "undefined" && imgSrc != "") {
-                self.pushImageReport(self.getRealImageSource(url, imgSrc));
+                self.pushImageReport(
+                    self.getRealImageSource(self.crawlUrlString, imgSrc));
             }
         });
-
-        if (isUnitTest == true) {
-            // Abort the below code in case run unit test
-            return;
-        }
 
         if (this.model.length == 0) {
             self.view.setCrawlStatusLabel("Ok");
             return;
         }
+
+        var imageLoaders = [];
+
+        this.model.forEach(function(element, index, array) {
+            imageLoaders[index] = new ImageManager(element.source);
+            imageLoaders[index].loadImageSize();
+        });
+
+        // Sleep and wait for all images size is load
+        this.waitImageLoad(self, imageLoaders);
+
+        // if (isUnitTest == true) {
+        //     // Abort the below code in case run unit test
+        //     return;
+        // }
+    },
+
+    /**
+     * Callback function when all image loaders complete. It will set result to
+     * application GUI & call API to put to web service
+     *
+     * @param imageLoaders An array of instances of ImageManager
+     */
+    imageLoadSuccessCallback: function(imageLoaders) {
+        var self = this;
+        this.model.forEach(function(element, index, array) {
+            element.width = imageLoaders[index].width;
+            element.height = imageLoaders[index].height;
+        });
 
         // Dipslay crawl result
         console.log("Result: " + JSON.stringify(this.model));
@@ -115,13 +147,29 @@ HomePageController = $class(BaseController, {
 
         // POST report to ajax
         $.post(this.POST_REPORT_API_URL, {
-            url: url,
+            url: this.crawlUrlString,
             imageCount: this.model.length,
             imageList: this.model
         }, function(data) {
             console.log("Insert to DB, _id: " + data._id);
             self.view.setCrawlStatusLabel("Ok");
+        }).fail(function() {
+            console.log("Connection to web service fail");
+            self.view.setCrawlStatusLabel("Error");
         });
+    },
+
+    waitImageLoad: function(self, imageLoaders) {
+        // Sleep and wait for all images size is load
+        setTimeout(function() {
+            if (ImageManager.isAllImageLoadComplete(imageLoaders) == false) {
+                // Continue wait
+                self.waitImageLoad(self, imageLoaders);
+            } else {
+                // Load complete
+                self.imageLoadSuccessCallback(imageLoaders);
+            }
+        }, 1000);
     },
 
     /**
@@ -156,7 +204,7 @@ HomePageController = $class(BaseController, {
             } else if (itemSrc[0] == '/') {
                 // Image locate at root
                 realImgUrl = urlLocation.protocol + "//"
-                + urlLocation.hostname + imgLocation.pathname;
+                + urlLocation.hostname + itemSrc;
             } else {
                 // Image is relative path
 
